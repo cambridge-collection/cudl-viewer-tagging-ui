@@ -332,6 +332,13 @@ export default class OSDController extends Controller {
 
     }
 
+    drawMarkers(annos) {
+        for (var i = 0; i < annos.length; i++) {
+            var anno = annos[i];
+            this.drawMarker(i, anno);
+        }
+    }
+
     clearMarker(id) {
         this.osd.removeOverlay( 'osd-anno-marker' + id );
     }
