@@ -10,6 +10,16 @@ import Metadata from './models/metadata';
 
 
 export default function setUpTaggingTab(data, docId) {
+    if (!isTaggingEnabled()) {
+        console.log('Tagging is disabled');
+        removeTaggingTab();
+        return false;
+    }
+
+    //
+    //
+    //
+
     var metadata = new Metadata(data, docId);
 
     var ajax_c = new RestClientAgent();
@@ -44,11 +54,30 @@ export default function setUpTaggingTab(data, docId) {
         tagging_c.endTagging();
     });
 
+    //
+    //
+    //
+
+    function isTaggingEnabled() {
+        return taggable === 'false' ? false : true;
+    }
+
+    function removeTaggingTab() {
+        $('#taggingtab').parent().remove();
+        $('#tagging').remove();
+    }
+
 }
+
 
 // Export entry point to cudl.
 cudl.setupTaggingTab = setUpTaggingTab;
 
 //
 // this tagging library assumes the presence of cudl, cudl.viewer and cudl.pagnum
+//
+// user attribute is passed from session to js variable 'global_user' in document.jsp page, which is
+// used to check if user has been authenticated. this is just a temporary solution. in practice, should
+// use cookie - server sends a small piece of cookie indicating user authentication status back to
+// client broser. the cookie should have the same expiry date.
 //
