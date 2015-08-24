@@ -5,7 +5,7 @@
 
 import util from 'util';
 
-import _ from 'lodash';
+import _ from 'lodash/lang';
 
 import { ValueError } from '../utils/exceptions';
 

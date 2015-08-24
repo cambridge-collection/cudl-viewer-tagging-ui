@@ -1,8 +1,6 @@
 
 import '../libs/d3.layout.cloud';
 
-import _ from 'lodash';
-
 /**
  * derived from Json Davies's wordcloud.
  * @see https://www.jasondavies.com/wordcloud/cloud.min.js

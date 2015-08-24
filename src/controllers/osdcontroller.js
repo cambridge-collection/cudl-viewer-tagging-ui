@@ -298,7 +298,7 @@ export default class OSDController extends Controller {
     drawMarker(id, anno) {
 
         var self = this;
-
+        
         var target = anno.getTarget(), type = anno.getType(), 
             posType = anno.getPositionType(), coordinates = anno.getCoordinates(), 
             uuid = anno.getUUID(), name = anno.getName();
@@ -330,6 +330,13 @@ export default class OSDController extends Controller {
             });
         }
 
+    }
+
+    drawMarkers(annos) {
+        for (var i = 0; i < annos.length; i++) {
+            var anno = annos[i];
+            this.drawMarker(i, anno);
+        }
     }
 
     clearMarker(id) {

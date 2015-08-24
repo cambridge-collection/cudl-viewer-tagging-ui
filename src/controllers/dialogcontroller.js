@@ -464,10 +464,10 @@ export default class DialogController extends Controller {
 	}
 
 	/** draw new added annotation */
-	drawMarker(id, anno) {
+	drawMarker(anno) {
 		this.toolbar_c.fetchAnnotations(annos => {
 			var size = annos.length;
-			this.osd_c.drawMarker(id, anno);
+			this.osd_c.drawMarker(size, new Annotation(anno));
 		});
 	}
 
