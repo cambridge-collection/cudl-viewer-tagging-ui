@@ -26,6 +26,11 @@ module.exports = {
             'spin': 'var Spinner'
         }
     ],
+    resolve: {
+        alias: {
+            'd3.layout.cloud': 'd3.layout.cloud/d3.layout.cloud'
+        }
+    },
     module: {
         loaders: [
             {
