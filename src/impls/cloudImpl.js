@@ -1,5 +1,5 @@
 
-import '../libs/d3.layout.cloud';
+import 'd3.layout.cloud';
 
 /**
  * derived from Json Davies's wordcloud.
