@@ -10,9 +10,12 @@ import Metadata from './models/metadata';
 
 
 export default function setUpTaggingTab(data, docId) {
-	if (!isTaggingEnabled()) {
+
+	if (taggable === 'false') {
 		console.log('Tagging is disabled');
-		removeTaggingTab();
+		// remove tagging tab and panel
+		$('#taggingtab').parent().remove();
+		$('#tagging').remove();
 		return false;
 	}
 
@@ -54,19 +57,6 @@ export default function setUpTaggingTab(data, docId) {
         tagging_c.endTagging();
     });
 
-    //
-    //
-    //
-
-    function isTaggingEnabled() {
-		return taggable === 'false' ? false : true;
-	}
-
-	function removeTaggingTab() {
-		$('#taggingtab').parent().remove();
-		$('#tagging').remove();
-	}
-    
 }
 
 
