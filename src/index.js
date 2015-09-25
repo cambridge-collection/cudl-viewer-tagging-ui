@@ -45,7 +45,7 @@ export default function setUpTaggingTab(data, docId) {
 			e.preventDefault();
 			e.stopPropagation();
 			
-			window.location.href = '/auth/login';
+			window.location.href = '/auth/login?access=all';
 		} else {
 			// start tagging
 			tagging_c.startTagging();
