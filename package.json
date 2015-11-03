@@ -15,7 +15,6 @@
     "css-loader": "^0.15.6",
     "d3": "^3.5.6",
     "d3.layout.cloud": "^1.1.1",
-    "extract-text-webpack-plugin": "^0.8.2",
     "jquery-ui": "^1.10.5",
     "less": "^2.5.1",
     "less-loader": "^2.2.0",
@@ -28,6 +27,7 @@
     "d3": "^3.5.6",
     "d3.layout.cloud": "^1.1.1",
     "jquery": "^1",
-    "jquery-ui": "^1.10.5"
+    "jquery-ui": "^1.10.5",
+    "webpack-config": "^1"
   }
 }
