@@ -1,6 +1,3 @@
-
-import cudl from 'cudl';
-
 /** controllers */
 import RestClientAgent from './controllers/restclientagent';
 import TaggingController from './controllers/taggingcontroller';
@@ -9,7 +6,7 @@ import TaggingController from './controllers/taggingcontroller';
 import Metadata from './models/metadata';
 
 
-export default function setUpTaggingTab(data, docId) {
+export default function setUpTaggingTab(data, docId, viewer) {
 
     if (taggable === 'false') {
         console.log('Tagging is disabled');
@@ -19,10 +16,6 @@ export default function setUpTaggingTab(data, docId) {
         return false;
     }
 
-    //
-    //
-    //
-
     var metadata = new Metadata(data, docId);
 
     var ajax_c = new RestClientAgent();
@@ -30,13 +23,13 @@ export default function setUpTaggingTab(data, docId) {
     var tagging_c = new TaggingController({
         metadata: metadata,
         // page: page,
-        ajax_c: ajax_c
+        ajax_c: ajax_c,
+        viewer: viewer
     }).init();
 
     //
     // bootstrap tab event handlers
     //
-
     $('#taggingtab').on('show.bs.tab', e => {
         // check authentication
         if (global_user === "false") {
@@ -58,10 +51,6 @@ export default function setUpTaggingTab(data, docId) {
     });
 
 }
-
-
-// Export entry point to cudl.
-cudl.setupTaggingTab = setUpTaggingTab;
 
 //
 // this tagging library assumes the presence of cudl, cudl.viewer and cudl.pagnum

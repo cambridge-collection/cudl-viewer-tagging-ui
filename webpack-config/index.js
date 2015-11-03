@@ -14,8 +14,5 @@ module.exports = new WebpackConfig()
             path: path.join(__dirname, '../dist'),
             filename: 'tagging.js',
             library: 'tagging'
-        },
-        externals: [{
-            'cudl': 'var cudl'
-        }]
+        }
     });

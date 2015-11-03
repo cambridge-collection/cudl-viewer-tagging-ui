@@ -1,5 +1,6 @@
+import isObject from 'lodash/lang/isObject';
 
-import cudl from 'cudl';
+import { ValueError } from '../utils/exceptions';
 
 /** views */
 import PanelView from '../views/panel';
@@ -16,9 +17,20 @@ import TagCloudController from './tagcloudcontroller';
 
 
 export default class TaggingController extends Controller {
+    /**
+     * @param options.viewer An OpenSeadragon Viewer object.
+     */
     constructor(options) {
         super(options);
+
+        if(!isObject(options.viewer)) {
+            throw new ValueError(
+                `Expected an OpenSeadragon Viewer instance for options.viewer` +
+                ` but got: ${JSON.stringify(options.viewer)}`);
+        }
+
         this.ajax_c = options.ajax_c;
+        this.viewer = options.viewer
     }
 
     init() {
@@ -32,11 +44,11 @@ export default class TaggingController extends Controller {
         }).render();
 
         var toolbar = new ToolbarView({
-            of: cudl.viewer.element
+            of: this.viewer.element
         }).render();
 
         var dialog = new DialogView({
-            of: cudl.viewer.element
+            of: this.viewer.element
         }).render();
 
         //
@@ -73,7 +85,7 @@ export default class TaggingController extends Controller {
         this.osd_c = new OSDController({
             metadata:   this.metadata,
             // page:        this.page,
-            osd:        cudl.viewer
+            osd:        this.viewer
         });
 
         //
@@ -133,6 +145,11 @@ export default class TaggingController extends Controller {
      * override page navigation functions
      */
     overridePrototype(opts) {
+        // FIXME: remove these, I'm pretty sure they never get called as
+        // cudl.setupSeaDragon is a normal function, not used as a class...
+        return;
+        // /FIXME
+
         cudl.setupSeaDragon.prototype.nextPage1 = function() {
             console.log('nn');
             // draw annotation markers if toggle is on
