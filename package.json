@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "d3": "^3.5.6",
-    "d3.layout.cloud": "^1.1.1",
+    "d3-cloud": "^1",
     "jquery": "^1",
     "jquery-ui": "^1.10.5",
     "webpack-config": "^1"
