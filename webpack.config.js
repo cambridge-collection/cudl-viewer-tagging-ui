@@ -15,9 +15,7 @@ module.exports = {
     },
     externals: [
         {
-            'jquery': 'var jQuery',
-            'cudl': 'var cudl',
-            'spin': 'var Spinner'
+            'cudl': 'var cudl'
         }
     ],
     module: {
