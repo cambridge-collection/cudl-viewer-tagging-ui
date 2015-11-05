@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import 'd3-cloud';
+import d3 from 'd3';
+import cloud from 'd3-cloud';
 
 
 /**
@@ -43,7 +44,7 @@ export var cloudImpl = {
             this.statusText = d3.select( options.statusEl );
 
             // d3 cloud
-            this.layout = d3.layout.cloud()
+            this.layout = cloud()
                 .timeInterval(10)
                 .size([this.W, this.H])
                 .rotate(0)
