@@ -12,9 +12,10 @@ import TaggingController from './controllers/taggingcontroller';
 import Metadata from './models/metadata';
 
 
-export default function setUpTaggingTab(data, docId, viewer) {
+export function setupTaggingTab(options) {
+    let {data, docId, viewer, taggingEnabled} = options;
 
-    if (taggable === 'false') {
+    if (!taggingEnabled) {
         console.log('Tagging is disabled');
         // remove tagging tab and panel
         $('#taggingtab').parent().remove();
