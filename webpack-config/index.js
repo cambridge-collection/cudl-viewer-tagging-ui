@@ -8,7 +8,7 @@ module.exports = new WebpackConfig()
     .merge({
         context: path.resolve(__dirname, '..'),
         entry: {
-            client: path.resolve(__dirname, '../src/bootstrap')
+            client: path.resolve(__dirname, '../src/index')
         },
         output: {
             path: path.join(__dirname, '../dist'),

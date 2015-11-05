@@ -1,3 +1,7 @@
+// Imported for side-effects:
+import '../styles/tagging.less';
+import 'babel-polyfill';
+
 /** controllers */
 import RestClientAgent from './controllers/restclientagent';
 import TaggingController from './controllers/taggingcontroller';
