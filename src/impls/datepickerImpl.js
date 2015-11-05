@@ -1,5 +1,5 @@
+import $ from 'jquery';
 
-/* require d3 */
 
 export var datepickerImpl = {
 

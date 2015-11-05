@@ -1,4 +1,6 @@
+import $ from 'jquery';
 import 'd3-cloud';
+
 
 /**
  * derived from Json Davies's wordcloud.

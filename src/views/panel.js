@@ -1,3 +1,4 @@
+import $ from 'jquery';
 
 import View from './common/view';
 import TagCloudView from './tagcloud';

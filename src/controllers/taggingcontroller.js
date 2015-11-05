@@ -1,5 +1,7 @@
 import isObject from 'lodash/lang/isObject';
 
+import $ from 'jquery';
+
 import { ValueError } from '../utils/exceptions';
 
 /** views */

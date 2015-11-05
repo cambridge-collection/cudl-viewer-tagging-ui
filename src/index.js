@@ -2,6 +2,8 @@
 import '../styles/tagging.less';
 import 'babel-polyfill';
 
+import $ from 'jquery';
+
 /** controllers */
 import RestClientAgent from './controllers/restclientagent';
 import TaggingController from './controllers/taggingcontroller';

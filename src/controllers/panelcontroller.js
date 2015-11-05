@@ -1,4 +1,4 @@
-"use strict";
+import $ from 'jquery';
 
 /** controllers */
 import Controller from './common/controller';

@@ -1,4 +1,4 @@
-
+import $ from 'jquery';
 import GoogleMapsLoader from 'google-maps';
 
 
