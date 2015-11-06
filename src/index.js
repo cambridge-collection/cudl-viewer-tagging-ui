@@ -15,9 +15,11 @@ import Metadata from './models/metadata';
 
 
 export function setupTaggingTab(options) {
-    let {data, docId, viewer, taggingEnabled} = options;
+    let {docId, viewer, viewerModel} = options;
 
-    if (!taggingEnabled) {
+    let context = getPageContext();
+
+    if (!viewerModel.isTaggingEnabled()) {
         console.log('Tagging is disabled');
         // remove tagging tab and panel
         $('#taggingtab').parent().remove();
@@ -25,7 +27,7 @@ export function setupTaggingTab(options) {
         return false;
     }
 
-    var metadata = new Metadata(data, docId);
+    var metadata = new Metadata(viewerModel.getMetadata(), docId);
 
     var ajax_c = new RestClientAgent();
 
@@ -33,7 +35,8 @@ export function setupTaggingTab(options) {
         metadata: metadata,
         // page: page,
         ajax_c: ajax_c,
-        viewer: viewer
+        viewer: viewer,
+        viewerModel: viewerModel
     }).init();
 
     //

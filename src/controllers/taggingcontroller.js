@@ -33,6 +33,7 @@ export default class TaggingController extends Controller {
 
         this.ajax_c = options.ajax_c;
         this.viewer = options.viewer
+        this.viewerModel = options.viewerModel;
     }
 
     init() {
@@ -74,14 +75,16 @@ export default class TaggingController extends Controller {
             metadata:   this.metadata,
             // page:        this.page,
             dialog:     dialog,
-            ajax_c:     this.ajax_c
+            ajax_c:     this.ajax_c,
+            viewerModel: this.viewerModel
         });
 
         this.toolbar_c = new ToolbarController({
             metadata:   this.metadata,
             // page:        this.page,
             toolbar:    toolbar,
-            ajax_c:     this.ajax_c
+            ajax_c:     this.ajax_c,
+            viewerModel: this.viewerModel
         });
 
         this.osd_c = new OSDController({

@@ -16,6 +16,7 @@ export default class ToolbarController extends Controller {
         super(options);
         this.toolbar = options.toolbar;
         this.ajax_c  = options.ajax_c;
+        this.viewerModel = options.viewerModel;
 
         // constants
         this.TOOLBAR  = TOOLBAR;
@@ -200,7 +201,7 @@ export default class ToolbarController extends Controller {
             var anno = annos[i];
 
             // skip if not for the current page
-            if (anno.page != cudl.pagenum) // assume the presence of cudl.pagenum
+            if (anno.page != this.viewerModel.getPageNumber())
                 continue;
             // skip if for document
             if (anno.type == this.TTARGETS.DOC)
@@ -222,7 +223,8 @@ export default class ToolbarController extends Controller {
         //
         // ajax call to fetch annotations
         //
-        this.ajax_c.getAnnotations(this.metadata.getItemId(), cudl.pagenum, callback); // assume the presence of cudl.pagenum
+        this.ajax_c.getAnnotations(this.metadata.getItemId(),
+                                   this.viewerModel.getPageNumber(), callback);
     }
 
     /**

@@ -21,6 +21,7 @@ export default class DialogController extends Controller {
         super(options);
         this.dialog = options.dialog;
         this.ajax_c = options.ajax_c;
+        this.viewerModel = options.viewerModel;
 
         // constants
         this.TOOLBAR = TOOLBAR;
@@ -430,7 +431,7 @@ export default class DialogController extends Controller {
 
         return new Annotation({
             docId : this.metadata.getItemId(),
-            page : cudl.pagenum, // assume the presence of cudl.pagenum
+            page : this.viewerModel.getPageNumber(),
             target : target,
             type : type,
             name : name,
