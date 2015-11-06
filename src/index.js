@@ -4,6 +4,8 @@ import 'babel-polyfill';
 
 import $ from 'jquery';
 
+import { getPageContext } from 'cudl-viewer-ui/src/js/context';
+
 /** controllers */
 import RestClientAgent from './controllers/restclientagent';
 import TaggingController from './controllers/taggingcontroller';
@@ -39,17 +41,18 @@ export function setupTaggingTab(options) {
     //
     $('#taggingtab').on('show.bs.tab', e => {
         // check authentication
-        if (global_user === "false") {
+        if(!context.isUser) {
             // prevent tab panel from showing before
             // redirecting user to login page
             e.preventDefault();
             e.stopPropagation();
 
             window.location.href = '/auth/login?access=all';
-        } else {
-            // start tagging
-            tagging_c.startTagging();
+            return;
         }
+
+        // start tagging
+        tagging_c.startTagging();
     });
 
     $('#taggingtab').on('hide.bs.tab', function(e) {
