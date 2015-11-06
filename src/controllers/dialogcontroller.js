@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'jquery-ui';
+import isUndefined from 'lodash/lang/isUndefined';
 
 /** controllers */
 import Controller from './common/controller';
@@ -246,7 +247,7 @@ export default class DialogController extends Controller {
         var dlg, my, at;
 
         // tagging dialogs
-        if (!_.isUndefined(opts.target)) {
+        if (!isUndefined(opts.target)) {
             switch(opts.type) {
                 case this.TOOLBAR.SECONDARY.PERSON: dlg = this.dialog.person.el; break;
                 case this.TOOLBAR.SECONDARY.ABOUT:  dlg = this.dialog.about.el;  break;
@@ -264,7 +265,7 @@ export default class DialogController extends Controller {
             dlg = this.dialog.info.el;
             my = 'center top+20', at = 'center bottom';
 
-            if (!_.isUndefined(opts.anno)) {
+            if (!isUndefined(opts.anno)) {
                 $(dlg).data('uuid', opts.anno.uuid);
                 $(dlg).data('id', opts.anno.id);
                 $(dlg).html(opts.anno.content);
