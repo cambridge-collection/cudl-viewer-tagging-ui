@@ -33,6 +33,7 @@
   },
   "peerDependencies": {
     "babel-core": "^5",
+    "cudl-viewer-ui": "*",
     "webpack": "*"
   },
   "private": true,
