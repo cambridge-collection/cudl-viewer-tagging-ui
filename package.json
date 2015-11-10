@@ -1,6 +1,6 @@
 {
   "name": "cudl-viewer-tagging-ui",
-  "version": "0.1.0",
+  "version": "1.0.0-beta.1",
   "description": "The front-end UI for the CUDL Viewer tagging functionality",
   "main": "src/index.js",
   "repository": {
