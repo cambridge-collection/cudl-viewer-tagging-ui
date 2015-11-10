@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "babel-loader": "^5",
-    "babel-polyfill": "^6",
     "css-loader": "^0",
     "d3": "^3",
     "d3-cloud": "^1",
@@ -33,7 +32,6 @@
   },
   "peerDependencies": {
     "babel-core": "^5",
-    "cudl-viewer-ui": "*",
     "webpack": "*"
   },
   "private": true,

@@ -1,6 +1,6 @@
 // Imported for side-effects:
 import '../styles/tagging.less';
-import 'babel-polyfill';
+import 'babel-core/polyfill';
 
 import $ from 'jquery';
 
