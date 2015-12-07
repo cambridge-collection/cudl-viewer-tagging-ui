@@ -1,5 +1,5 @@
 
-import 'd3.layout.cloud';
+import layoutCloud from 'd3-cloud';
 
 /**
  * derived from Json Davies's wordcloud.
@@ -42,7 +42,7 @@ export var cloudImpl = {
             this.statusText = d3.select( options.statusEl );
 
             // d3 cloud
-            this.layout = d3.layout.cloud()
+            this.layout = layoutCloud()
                 .timeInterval(10)
                 .size([this.W, this.H])
                 .rotate(0)
