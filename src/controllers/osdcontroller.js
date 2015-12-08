@@ -96,7 +96,6 @@ export default class OSDController extends Controller {
     actionOnCanvasClick(position) {
 
         var idx = this.toolbar_c.getActiveTbId();
-        console.log(idx);
 
         // clear guides
         this.clearGuides();
@@ -206,7 +205,6 @@ export default class OSDController extends Controller {
 
         var rect = this.getRectViewportCoords(point, 60, 60),
             OSDrect = new OpenSeadragon.Rect(rect[0], rect[1], rect[2], rect[3]);
-        console.log(rect);
 
         this.osd.addOverlay(box, OSDrect, OpenSeadragon.OverlayPlacement.CENTER);
     }
