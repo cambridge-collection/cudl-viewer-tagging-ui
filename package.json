@@ -26,9 +26,5 @@
     "webpack": "^1.10.5",
     "google-maps": "~3.1.0"
   },
-  "dependencies": {
-    "d3": "^3.5.6",
-    "d3.layout.cloud": "^1.1.1",
-    "jquery-ui": "^1.10.5"
-  }
+  "dependencies": {}
 }
