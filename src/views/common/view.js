@@ -1,8 +1,3 @@
-
-/**
- * Author: Hal Blackburn
- */
-
 import assert from 'assert';
 
 import $ from 'jquery';

@@ -1,8 +1,3 @@
-
-/**
- * Author: Hal Blackburn
- */
-
 class BaseError extends Error {
     get name() {
         return Object.getPrototypeOf(this).constructor.name;

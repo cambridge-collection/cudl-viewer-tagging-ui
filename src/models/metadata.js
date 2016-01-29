@@ -1,8 +1,3 @@
-
-/**
- * Author: Hal Blackburn
- */
-
 import util from 'util';
 
 import _ from 'lodash/lang';
