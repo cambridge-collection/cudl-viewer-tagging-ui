@@ -101,10 +101,10 @@ export default class TaggingController extends Controller {
         this.osd_c.init();
 
         //
-        // override page navigation functions
+        // on page turn ensure markers are shown if toggle enabled. 
         //
 
-        this.overridePrototype({
+        this.showMarkersOnPageTurn({
             toolbar_c: this.toolbar_c
         });
 
@@ -136,24 +136,19 @@ export default class TaggingController extends Controller {
     }
 
     /**
-     * override page navigation functions
+     * Ensure the toggle remains on if it is on when the page is turned. 
      */
-    overridePrototype(opts) {
-        cudl.setupSeaDragon.prototype.nextPage1 = function() {
-            console.log('nn');
-            // draw annotation markers if toggle is on
-            if ( this.opts.toolbar_c.toolbar.colorIndicator.shown ) {
-                this.opts.toolbar_c.drawMarkersAction();
+    showMarkersOnPageTurn(opts) {
+    	
+    	cudl.viewer.addHandler("page", function () {
+      	  
+      	    // draw annotation markers if toggle is on
+            if (opts.toolbar_c.toolbar.colorIndicator.shown) {
+              opts.toolbar_c.drawMarkersAction();
             }
-        }
+      	
+      	});
 
-        cudl.setupSeaDragon.prototype.prevPage = function() {
-            console.log('pp');
-            // draw annotation markers if toggle is on
-            if ( this.opts.toolbar.colorIndicator.shown ) {
-                this.opts.toolbar_c.drawMarkersAction();
-            }
-        }
     }
 
 }
