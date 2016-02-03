@@ -18,7 +18,17 @@ export default class View {
         assert(of instanceof Element, "of must be an Element", of);
         this.setEl(el);
         this.setOf(of);
+
+        this._bindEvents();
     }
+
+    remove() {
+        $(this.el).remove();
+        this._unbindEvents();
+    }
+
+    _bindEvents() { }
+    _unbindEvents() { }
 
     createElement() {
         var tagName = this.tag || 'div';
