@@ -22,3 +22,5 @@ export class NotImplementedError extends BaseError { }
 export class ValueError extends BaseError { }
 
 export class IllegalStateException extends BaseError { }
+
+export class RuntimeException extends BaseError { }
