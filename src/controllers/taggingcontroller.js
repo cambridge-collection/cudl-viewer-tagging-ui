@@ -5,6 +5,7 @@ import cudl from 'cudl';
 import PanelView from '../views/panel';
 import ToolbarView from '../views/toolbar';
 import DialogView from '../views/dialog';
+import AnnotationListView from '../views/annotationlist';
 
 /** controllers */
 import Controller from './common/controller';
@@ -14,11 +15,19 @@ import DialogController from './dialogcontroller';
 import OSDController from './osdcontroller';
 import TagCloudController from './tagcloudcontroller';
 
+/* models */
+import { AnnotationListModel } from '../models/annotationlist';
+
 
 export default class TaggingController extends Controller {
     constructor(options) {
         super(options);
         this.ajax_c = options.ajax_c;
+
+        this.annotationList = new AnnotationListModel();
+        this.annotationList.setItemId(cudl.docId);
+
+        $(cudl).on('change.cudl.pagenum', (e, n) => this.setPageNumber(n));
     }
 
     init() {
@@ -28,7 +37,10 @@ export default class TaggingController extends Controller {
         //
 
         var panel = new PanelView({
-            el: $('#tagging')[0]
+            el: $('#tagging')[0],
+            annotationList: new AnnotationListView({
+                annotationList: this.annotationList
+            })
         }).render();
 
         var toolbar = new ToolbarView({
@@ -109,6 +121,11 @@ export default class TaggingController extends Controller {
         });
 
         return this;
+    }
+
+    setPageNumber(pageNumber) {
+        this.annotationList.setPage(pageNumber);
+        this.annotationList.load();
     }
 
     startTagging() {
