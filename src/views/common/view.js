@@ -9,6 +9,7 @@ export default class View {
     constructor(options) {
         this.className = options.className || this.className || null;
         this.id = options.id || this.id || null;
+        this.tag = options.tag || this.tag || null;
 
         var el = options.el || this.createElement();
         var of = options.of || this.createElement();
@@ -20,7 +21,11 @@ export default class View {
     }
 
     createElement() {
-        return $('<div>').addClass(this.className).attr('id', this.id)[0];
+        var tagName = this.tag || 'div';
+        return $(document.createElement(tagName))
+            .addClass(this.className)
+            .attr('id', this.id)
+            .get(0);
     }
 
     setEl(el) {
