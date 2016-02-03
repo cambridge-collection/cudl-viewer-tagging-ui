@@ -38,11 +38,9 @@ export class AnnotationListModel {
                     this.loadingXhr = $.ajax({
                         url: `/crowdsourcing/anno/get/${encodeURIComponent(this.itemId)}/${encodeURIComponent(this.pageNumber)}`
                     })
-                    .fail(() => this.fsm.failed())
+                    .fail((xhr) => this.fsm.failed(xhr.status))
                     .done((data) => {
-                        this._set('annotations',
-                                  data.result.annotations.map(a => new Annotation(a)));
-                        this.fsm.loaded();
+                        this.fsm.loaded(data.result.annotations.map(a => new Annotation(a)));
                     })
                     .done(() => {
                         this.xhr = null;
@@ -55,6 +53,15 @@ export class AnnotationListModel {
                         this.loadingXhr.abort();
                     }
                     this.loadingXhr = null;
+                },
+                onafterloaded: (event, from, to, annotations) => {
+                    this._set('annotations', annotations);
+                },
+                onentererror: (event, from, to, status) => {
+                    this.errorStatus = status;
+                },
+                onleaveerror: () => {
+                    this.errorStatus = undefined;
                 },
 
                 onabortDelete: () => {
@@ -73,22 +80,32 @@ export class AnnotationListModel {
                         method: 'POST',
                         data: annotationIds
                     })
-                    .fail(() => this.fsm.deleteFailed())
+                    .fail((xhr) => this.fsm.deleteFailed(xhr.status))
                     .done(removedIds => this.fsm.deleted(removedIds));
 
                     this.abortDeleteOperation = () => jqxhr.abort();
                 },
                 onleavedeleting: () =>
                     this.abortDeleteOperation = null,
-                onbeforedeleted: (event, from, to, removedIds) =>
+                onafterdeleted: (event, from, to, removedIds) =>
                     this._removeAnnotationsWithIds(removedIds),
-
+                onbeforedeleteFailed: (event, from, to , status) => {
+                    $(this).trigger('delete-failed', status);
+                }
             }
         });
     }
 
     getState() {
         return this.fsm.current;
+    }
+
+    getErrorStatus() {
+        if(!this.fsm.is('error')) {
+            throw new IllegalStateException(
+                'Annotation list is not in the error state');
+        }
+        return this.errorStatus;
     }
 
     _set(name, value, quiet=false) {
@@ -136,7 +153,7 @@ export class AnnotationListModel {
     }
 
     getAnnotations() {
-        if(!this.fsm.is('idle')) {
+        if(!(this.fsm.is('idle'))) {
             throw new IllegalStateException('No annotations loaded');
         }
 

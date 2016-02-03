@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import _ from 'lodash';
+import Spinner from 'spin.js';
 
 import View from './common/view';
 import { ICONS } from '../utils/base64icons';
@@ -9,16 +10,19 @@ import { NotImplementedError, RuntimeException } from '../utils/exceptions';
 export default class AnnotationListView extends View {
     constructor(options) {
         super(_.assign({
-            className: 'panel panel-default'
+            className: 'panel panel-default annotation-list'
         }, options));
 
         this.annotationList = options.annotationList;
 
         $(this.annotationList)
             .on('change:state', this.render.bind(this))
-            .on('change:annotations', this._markAnnotationViewsDirty.bind(this));
+            .on('change:annotations', this._markAnnotationViewsDirty.bind(this))
+            .on('delete-failed', (e, status) => this._renderDeleteError(status));
 
-        $(this.el).on('click.annotationlistview');
+        this._renderInitial();
+
+        this.spinner = new Spinner();
     }
 
     _bindEvents() {
@@ -47,6 +51,8 @@ export default class AnnotationListView extends View {
     /** Called when our annotationList model's list of annotations changes */
     _markAnnotationViewsDirty() {
         this.annotationViews = null;
+        this._renderClear();
+        this._renderAnnotations();
     }
 
     getAnnotationViews() {
@@ -69,16 +75,16 @@ export default class AnnotationListView extends View {
     }
 
     onSelectedAnnotationsChanged() {
-        var button = $(this.el).find('.delete-selected');
+        var button = $(this.el).find('.button-holder');
 
         var selected = this.getSelectedAnnotationViews().length;
 
         // Mark the delete button as disabled/enabled
         if(selected === 0) {
-            button.attr('disabled', '');
+            button.animate({ height: 'hide', opacity: 'hide' }, 150);
         }
         else {
-            button.removeAttr('disabled');
+            button.animate({ height: 'show', opacity: 'show' }, 150);
         }
 
         // Update the select all checkbox state
@@ -90,19 +96,7 @@ export default class AnnotationListView extends View {
             this.getSelectedAnnotationViews().map(v => v.annotation));
     }
 
-    render() {
-        if(this.annotationList.getState() === 'idle') {
-            this._renderAnnotations();
-        }
-        else {
-            $(this.el).text('state: ' + this.annotationList.fsm.current);
-        }
-    }
-
-    _renderAnnotations() {
-        this.getAnnotationViews().forEach(av => av.render());
-        var annotations = this.getAnnotationViews().map(av => av.el);
-
+    _renderInitial() {
         $(this.el).html(`
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -114,22 +108,145 @@ export default class AnnotationListView extends View {
                 <table class="table">
                     <thead>
                         <tr>
-                            <td></td>
-                            <td>Value</td>
-                            <td>Target</td>
-                            <td>When</td>
-                            <td><input type="checkbox" class="select-all"></td>
+                            <th></th>
+                            <th>Value</th>
+                            <th>Target</th>
+                            <th>Created</th>
+                            <th><input type="checkbox" class="select-all"></th>
                         </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
 
-                <button type="button" class="btn btn-danger delete-selected" disabled="disabled">Delete selected</button>
+                <p class="text-right button-holder" style="display: none;">
+                    <button type="button" class="btn btn-danger delete-selected">Delete selected</button>
+                </p>
+
+                <div class="messages"></div>
+
+                <div class="loading-indicator"></div>
             </div>
-        `)
-        .find('.table tbody')
-        .append(annotations);
+        `);
+    }
+
+    _showLoadingIndicator() {
+        var indicator = $(this.el).find('.loading-indicator');
+        this.spinner.spin(indicator.get(0));
+        // indicator.animate({
+        //     opacity: 'show'
+        // }, 100);
+        indicator.show();
+    }
+
+    _hideLoadingIndicator() {
+        var indicator = $(this.el).find('.loading-indicator');
+        this.spinner.stop();
+        indicator.hide();
+        // indicator.animate({
+        //     opacity: 'hide'
+        // }, 50);
+    }
+
+    render() {
+        var state = this.annotationList.getState();
+
+        if(state === 'loading') {
+            this._renderClear();
+            this._showLoadingIndicator();
+        }
+        if(state === 'idle') {
+            this._hideLoadingIndicator();
+        }
+        else if(state === 'error') {
+            this._renderClear();
+            this._renderError();
+            this._hideLoadingIndicator();
+        }
+        else if(state === 'deleting') {
+            this._showLoadingIndicator();
+        }
+        else {
+            // $(this.el).text('state: ' + this.annotationList.fsm.current);
+        }
+    }
+
+    _renderClear() {
+        $(this.el)
+            .find('tbody, .messages')
+                .empty()
+            .end()
+            .find('.button-holder')
+                .hide();
+        this.setSelectAllState(false);
+    }
+
+    _renderDeleteError(status) {
+        if(status === 403) {
+            this._addMessage(`
+                <p class="text-danger">
+                    <strong>Unable delete annotations as you've become logged out.</strong>
+                    <a href="/auth/login">Log in</a>, then try again.
+                </p>
+            `);
+        }
+        else {
+            this._addMessage(`
+                <p class="text-danger">
+                    <strong>Unable to delete annotations.</strong>
+                    Please try again shortly.
+                </p>
+            `);
+        }
+    }
+
+    _renderError() {
+        if(this.annotationList.getErrorStatus() === 403) {
+            this._addMessage(`
+                <p class="text-danger">
+                    <strong>Unable to load annotations as you've become logged out.</strong>
+                    <a href="/auth/login">Log in</a>, then try again.
+                </p>
+            `);
+        }
+        else {
+            this._addMessage(`
+                <p class="text-danger">
+                    <strong>Unable to load annotations.</strong>
+                    Please try again shortly.
+                </p>
+            `);
+        }
+    }
+
+    _renderPageNumber() {
+        $(this.el).find('.panel-heading h3 small')
+            .text(`page ${_.escape(this.annotationList.getPage())}`);
+    }
+
+    _renderAnnotations() {
+        this._renderPageNumber()
+
+        this.getAnnotationViews().forEach(av => av.render());
+        var annotations = this.getAnnotationViews().map(av => av.el);
+
+        $(this.el)
+            .find('tbody')
+            .append(annotations)
+
+        if(annotations.length === 0) {
+            this._addMessage(`
+                <p class="text-muted">
+                    You have no annotations on this page
+                </p>
+            `);
+        }
+    }
+
+    _addMessage(msg) {
+        $(this.el)
+            .find('.messages')
+            .append(msg);
     }
 }
 
