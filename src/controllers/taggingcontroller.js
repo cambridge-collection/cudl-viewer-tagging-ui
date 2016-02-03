@@ -101,7 +101,7 @@ export default class TaggingController extends Controller {
         this.osd_c.init();
 
         //
-        // on page turn ensure markers are shown if toggle enabled. 
+        // on page turn ensure markers are shown if toggle enabled.
         //
 
         this.showMarkersOnPageTurn({
@@ -116,9 +116,9 @@ export default class TaggingController extends Controller {
         this.toolbar_c.openToolbar();
         // show wordcloud
         this.tagcloud_c.openCloud();
-        // store the previous zoomPerClick value and prevent zooming with value 1. 
+        // store the previous zoomPerClick value and prevent zooming with value 1.
         this.osd_c.osd.previousZoomPerClick=this.osd_c.osd.zoomPerClick;
-        this.osd_c.osd.zoomPerClick=1;         
+        this.osd_c.osd.zoomPerClick=1;
     }
 
     endTagging() {
@@ -132,22 +132,22 @@ export default class TaggingController extends Controller {
         this.tagcloud_c.closeCloud();
         // restore the zooming when clicking
         this.osd_c.osd.zoomPerClick=this.osd_c.osd.previousZoomPerClick;
-        delete this.osd_c.osd.previousZoomPerClick;        
+        delete this.osd_c.osd.previousZoomPerClick;
     }
 
     /**
-     * Ensure the toggle remains on if it is on when the page is turned. 
+     * Ensure the toggle remains on if it is on when the page is turned.
      */
     showMarkersOnPageTurn(opts) {
-    	
-    	cudl.viewer.addHandler("page", function () {
-      	  
-      	    // draw annotation markers if toggle is on
+
+        cudl.viewer.addHandler("page", function () {
+
+            // draw annotation markers if toggle is on
             if (opts.toolbar_c.toolbar.colorIndicator.shown) {
               opts.toolbar_c.drawMarkersAction();
             }
-      	
-      	});
+
+        });
 
     }
 
