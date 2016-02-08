@@ -24,7 +24,7 @@ export default class ToolbarView extends View {
                 + '</div>'
                 + '<label class="btn btn-primary">'
                     + '<input type="radio" name="options" id="option1" autocomplete="off">'
-                    + '<i class="fa fa-file-text-o fa-lg"/><div class="tb-label">Fragment</div>'
+                    + '<i class="fa fa-file-text-o fa-lg"/><div class="tb-label">Page</div>'
                 + '</label>'
                 + '<label class="btn btn-primary">'
                     + '<input type="radio" name="options" id="option2" autocomplete="off">'
