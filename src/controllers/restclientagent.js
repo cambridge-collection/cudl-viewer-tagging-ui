@@ -29,7 +29,7 @@ export default class RestClientAgent {
     removeAnnotation(anno, callback) {
         var url = path.join(API_RMV_ANNO, anno.getDocumentId(), anno.getUUID());
 
-        this._ajax({url: url, data: anno}, resp => {
+        this._ajax({url: url, data: anno, method: 'DELETE'}, resp => {
             callback(anno, resp);
         });
     }
@@ -75,7 +75,7 @@ export default class RestClientAgent {
         console.log(opts.url);
         // console.log('payload: '+opts.data);
 
-        var method  = _.isUndefined(opts.data) ? 'GET' : 'POST';
+        var method  =  opts.method || (_.isUndefined(opts.data) ? 'GET' : 'POST');
         var payload = _.isUndefined(opts.data) ? '' : JSON.stringify(opts.data);
         var cntType = _.isUndefined(opts.data) ? 'text/plain' : 'application/json; charset=utf-8';
 
@@ -89,7 +89,7 @@ export default class RestClientAgent {
         }).done(function(data, status) {
             // do something
         }).success(function(data, status) {
-            if (data.redirect) {
+            if (data && data.redirect) {
                 // user unauthorized, redirect to login page
                 window.location.href = data.redirectURL;
             } else {
