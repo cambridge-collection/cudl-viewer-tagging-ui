@@ -1,4 +1,4 @@
-
+import _ from 'lodash';
 import GoogleMapsLoader from 'google-maps';
 
 
@@ -55,55 +55,57 @@ export var gmapImpl = {
 
                 this.geocoder.geocode({'latLng': e.latLng}, (results, status) => {
                     if (status == google.maps.GeocoderStatus.OK) {
-                        if (results[1]) {
 
-                            var zoom = this.map.getZoom();
+                        var candidates = this.getPlace(results, this.map.getZoom());
 
-                            // clear markers
+                        if(candidates.length === 0) {
+                            console.warn('No suitable geocode results');
+                        }
+                        else {
+                            var address = candidates[0];
+
+
+                            $(this.input).val(address.formatted_address);
+
                             this.clearMarkers();
 
-                            // create new marker
-                            this.map.setZoom(8);
-                            this.map.setCenter(e.latLng);
+                            // Centre the map on the selected area and drop a
+                            // pin on it.
+                            this.map.fitBounds(address.geometry.bounds);
                             this.marker = new google.maps.Marker({
-                                position: e.latLng,
+                                position: address.geometry.location,
                                 map: this.map
                             });
                             this.marker.setMap(this.map);
                             this.markers.push(this.marker);
-
-                            // set place
-                            var city = this.getPlace( results[0].address_components, zoom);
-                            $(this.input).val( city );
-
-                        } else {
-                            alert('Geocoder failed due to: ' + status);
                         }
+                    }
+                    else {
+                        console.warn('Geocoder failed due to: ' + status);
                     }
                 });
             });
-
         });
-
     },
 
-    getPlace : function(address_components, zoom) {
-        var city, country, place;
-        $.each(address_components, function(i, addr_comp) {
-            if (addr_comp.types[0] == 'locality') {
-                city = addr_comp.long_name;
-            } else if (addr_comp.types[0] == 'country') {
-                country = addr_comp.long_name;
-            }
-        });
-
-        if (zoom <= 4) { // get country
-            place = country;
-        } else { // get country and city
-            place = city + (country.length > 0 ? ', ' + country : country);
+    getPlace: function(results, zoom) {
+        if(results.length === 0) {
+            return [];
         }
 
-        return place;
+        var isCountryLevel = address => {
+            return _.any(address.types, t => t === 'country');
+        };
+
+        var isCityOrTownOrCountryLevel = address => {
+            return _.any(address.types, t => t === 'country' ||
+                                             t === 'locality' ||
+                                             t === 'postal_town');
+        };
+
+        var predicate = zoom <= 4 ? isCountryLevel : isCityOrTownOrCountryLevel;
+
+        return _.filter(results, predicate);
     },
 
     clearMarkers : function() {
