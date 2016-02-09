@@ -45,11 +45,9 @@ export default function setUpTaggingTab(data, docId) {
             e.preventDefault();
             e.stopPropagation();
 
-            // get relative page url for this page
-            var a = document.createElement('a');
-            a.href = window.location.href;
-
-            window.location.href = '/auth/login?access='+encodeURIComponent(a.pathname+'#tagging');
+            // Redirect to login page, redirecting back after login
+            window.location.href = '/auth/login?access=' +
+                    encodeURIComponent(window.location.pathname + '#tagging');
 
         } else {
             // start tagging
