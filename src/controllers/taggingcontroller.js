@@ -28,6 +28,11 @@ export default class TaggingController extends Controller {
         this.annotationList.setItemId(cudl.docId);
 
         $(cudl).on('change.cudl.pagenum', (e, n) => this.setPageNumber(n));
+        $(this.ajax_c).on('change:annotation', this.onAnnotationAjaxChange.bind(this));
+    }
+
+    onAnnotationAjaxChange() {
+        this.annotationList.load();
     }
 
     init() {
