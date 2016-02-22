@@ -50,8 +50,15 @@ export function setupTaggingTab(options) {
             e.preventDefault();
             e.stopPropagation();
 
-            window.location.href = '/auth/login?access=all';
-            return;
+            // get relative page url for this page
+            var a = document.createElement('a');
+            a.href = window.location.href;
+
+            window.location.href = '/auth/login?access='+encodeURIComponent(a.pathname+'#tagging');
+
+        } else {
+            // start tagging
+            tagging_c.startTagging();
         }
 
         // start tagging
