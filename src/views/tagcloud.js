@@ -12,7 +12,7 @@ export default class TagCloud extends View {
 
         $(this.of).append('<div class="panel panel-default cloud">'
                             + '<div class="panel-heading">'
-                                + '<h3 class="panel-title">Keywords from mining the associated literature</h3>'
+                                + '<h3 class="panel-title">Keywords from text mining and user annotations</h3>'
                                 + '<div class="status"></div>'
                             + '</div>'
                             + '<div class="panel-body">'
@@ -22,7 +22,7 @@ export default class TagCloud extends View {
                             + '<div class="panel-footer">'
                                 + '<div>'
                                     + '<i class="fa fa-info-circle fa-lg"></i>'
-                                    + '<h6>You can remove the keywords that you think irrelevant by clicking them.</h6>'
+                                    + '<h6>If you disagree with  any of these keywords, click on them to let us know.</h6>'
                                 + '</div>'
                             + '</div>'
                         + '</div>');

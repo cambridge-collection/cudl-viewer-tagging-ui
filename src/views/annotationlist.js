@@ -326,7 +326,7 @@ class AnnotationView extends View {
 
     _getLocationType() {
         if(this.annotation.getTarget() === 'doc') {
-            return 'Whole page';
+            return 'Page';
         }
         else if(this.annotation.getTarget() === 'tag') {
             if(this.annotation.getPositionType() === 'point') {
