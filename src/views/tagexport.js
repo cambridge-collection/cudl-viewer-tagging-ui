@@ -21,13 +21,13 @@ export default class TagExport extends View {
                         <i class="fa fa-download fa-2x pull-left"></i> Export All <br> Contributions
                     </a>
                 </div>
-                <div class="btn-tip"><p>Export my contributions in RDF/XML format</p></div>
+                <div class="btn-tip"><p>Export all my contributions in RDF/XML format</p></div>
                 <div class="button" id="tagExport">
                     <a class="btn btn-info left" href="/crowdsourcing/export/">
                         <i class="fa fa-download fa-2x pull-left"></i> Export Document <br> Contributions
                     </a>
                 </div>
-                <div class="btn-tip"><p>Export the contributions to the current document in RDF/XML format</p></div>
+                <div class="btn-tip"><p>Export the contributions for just the current document in RDF/XML format</p></div>
             </div>
         `);
 

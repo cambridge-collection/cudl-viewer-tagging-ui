@@ -342,7 +342,7 @@ export default class OSDController extends Controller {
     }
 
     clearMarkers() {
-        $('div[id^=osd-anno-marker').each((i, el) => {
+        $('div[id^=osd-anno-marker]').each((i, el) => {
             this.osd.removeOverlay( el );
         });
     }

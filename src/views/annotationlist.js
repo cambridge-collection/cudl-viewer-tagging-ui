@@ -133,9 +133,6 @@ export default class AnnotationListView extends View {
     _showLoadingIndicator() {
         var indicator = $(this.el).find('.loading-indicator');
         this.spinner.spin(indicator.get(0));
-        // indicator.animate({
-        //     opacity: 'show'
-        // }, 100);
         indicator.show();
     }
 
@@ -143,9 +140,6 @@ export default class AnnotationListView extends View {
         var indicator = $(this.el).find('.loading-indicator');
         this.spinner.stop();
         indicator.hide();
-        // indicator.animate({
-        //     opacity: 'hide'
-        // }, 50);
     }
 
     render() {
@@ -165,9 +159,6 @@ export default class AnnotationListView extends View {
         }
         else if(state === 'deleting') {
             this._showLoadingIndicator();
-        }
-        else {
-            // $(this.el).text('state: ' + this.annotationList.fsm.current);
         }
     }
 
