@@ -9,6 +9,7 @@ export default class View {
     constructor(options) {
         this.className = options.className || this.className || null;
         this.id = options.id || this.id || null;
+        this.tag = options.tag || this.tag || null;
 
         var el = options.el || this.createElement();
         var of = options.of || this.createElement();
@@ -17,10 +18,24 @@ export default class View {
         assert(of instanceof Element, "of must be an Element", of);
         this.setEl(el);
         this.setOf(of);
+
+        this._bindEvents();
     }
 
+    remove() {
+        $(this.el).remove();
+        this._unbindEvents();
+    }
+
+    _bindEvents() { }
+    _unbindEvents() { }
+
     createElement() {
-        return $('<div>').addClass(this.className).attr('id', this.id)[0];
+        var tagName = this.tag || 'div';
+        return $(document.createElement(tagName))
+            .addClass(this.className)
+            .attr('id', this.id)
+            .get(0);
     }
 
     setEl(el) {

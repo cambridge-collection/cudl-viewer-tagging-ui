@@ -8,6 +8,8 @@ import TagExportView from './tagexport';
 export default class Panel extends View {
     constructor(options) {
         super(options);
+
+        this.tagexport = new TagExportView();
     }
 
     render() {
@@ -16,11 +18,9 @@ export default class Panel extends View {
             of: $(this.el)[0]
         }).render();
 
-        this.tagexport = new TagExportView({
-            of: $(this.el)[0]
-        }).render();
+        this.tagexport.render();
+        $(this.el).append(this.tagexport.el);
 
         return this;
     }
-
 }
