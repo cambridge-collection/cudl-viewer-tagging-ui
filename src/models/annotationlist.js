@@ -67,9 +67,6 @@ export class AnnotationListModel {
                 onabortDelete: () => {
                     this.abortDeleteOperation();
                 },
-                onleavedeleting: () => {
-                    this.deleteOperation = this.abortDeleteOperation = null;
-                },
                 onenterdeleting: (event, from, to, annotations) => {
                     var annotationIds = annotations
                         .map(a => ({name: 'uuid', value: a.getUUID()}));
