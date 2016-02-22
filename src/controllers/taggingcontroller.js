@@ -133,6 +133,9 @@ export default class TaggingController extends Controller {
         this.toolbar_c.openToolbar();
         // show wordcloud
         this.tagcloud_c.openCloud();
+        // store the previous zoomPerClick value and prevent zooming with value 1. 
+        this.osd_c.osd.previousZoomPerClick=this.osd_c.osd.zoomPerClick;
+        this.osd_c.osd.zoomPerClick=1;         
     }
 
     endTagging() {
@@ -144,6 +147,9 @@ export default class TaggingController extends Controller {
         this.osd_c.clearMarkers();
         // remove wordcloud from dom
         this.tagcloud_c.closeCloud();
+        // restore the zooming when clicking
+        this.osd_c.osd.zoomPerClick=this.osd_c.osd.previousZoomPerClick;
+        delete this.osd_c.osd.previousZoomPerClick;        
     }
 
     /**
