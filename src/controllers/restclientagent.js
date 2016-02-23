@@ -1,17 +1,29 @@
 import $ from 'jquery';
 
-import _ from 'lodash/lang';
+import _ from 'lodash';
+
+import { ValueError } from '../utils/exceptions';
 
 var path = require('path');
 
 
 export default class RestClientAgent {
 
+    _notifyAnnotationChanged(op, annotation) {
+        if(!_.includes(['update', 'create', 'delete'], op)) {
+            throw new ValueError(' Unknown op: ' + op);
+        }
+
+        $(this).trigger('change:annotation', _.object([[op, annotation]]));
+    }
+
     /** add or update annotation */
     addOrUpdateAnnotation(anno, callback) {
         var url = path.join(API_ADD_ANNO, anno.getDocumentId(), anno.getPageNum().toString());
 
         this._ajax({url: url, data: anno}, resp => {
+            var op = anno.getUUID() ? 'update' : 'create';
+            this._notifyAnnotationChanged(op, anno);
             callback(anno, resp);
         });
     }
@@ -30,6 +42,7 @@ export default class RestClientAgent {
         var url = path.join(API_RMV_ANNO, anno.getDocumentId(), anno.getUUID());
 
         this._ajax({url: url, data: anno, method: 'DELETE'}, resp => {
+            this._notifyAnnotationChanged('delete', anno);
             callback(anno, resp);
         });
     }

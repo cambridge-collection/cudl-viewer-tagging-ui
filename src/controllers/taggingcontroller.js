@@ -45,6 +45,11 @@ export default class TaggingController extends Controller {
         this.viewerModel.events.on('change:pageNumber', () => {
             this.setPageNumber(this.viewerModel.getPageNumber())
         });
+        $(this.ajax_c).on('change:annotation', this.onAnnotationAjaxChange.bind(this));
+    }
+
+    onAnnotationAjaxChange() {
+        this.annotationList.load();
     }
 
     init() {
