@@ -22,11 +22,13 @@
     "d3": "^3",
     "d3-cloud": "^1",
     "google-maps": "~3",
+    "javascript-state-machine": "^2",
     "jquery": "^1",
     "jquery-ui": "^1.10",
     "less": "^2",
     "less-loader": "^2",
     "lodash": "^3",
+    "moment": "^2",
     "style-loader": "^0",
     "webpack-config": "^1"
   },

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 
 export default class Annotation {
     constructor(options) {
@@ -83,8 +85,11 @@ export default class Annotation {
         return this.date;
     }
 
+    getParsedDate() {
+        return moment(this.date, 'YYYY-MM-DD HH:mm:ss ZZ');
+    }
+
     getUUID() {
         return this.uuid;
     }
-
 }

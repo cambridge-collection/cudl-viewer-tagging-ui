@@ -8,6 +8,7 @@ import { ValueError } from '../utils/exceptions';
 import PanelView from '../views/panel';
 import ToolbarView from '../views/toolbar';
 import DialogView from '../views/dialog';
+import AnnotationListView from '../views/annotationlist';
 
 /** controllers */
 import Controller from './common/controller';
@@ -16,6 +17,9 @@ import ToolbarController from './toolbarcontroller';
 import DialogController from './dialogcontroller';
 import OSDController from './osdcontroller';
 import TagCloudController from './tagcloudcontroller';
+
+/* models */
+import { AnnotationListModel } from '../models/annotationlist';
 
 
 export default class TaggingController extends Controller {
@@ -34,6 +38,13 @@ export default class TaggingController extends Controller {
         this.ajax_c = options.ajax_c;
         this.viewer = options.viewer
         this.viewerModel = options.viewerModel;
+
+        this.annotationList = new AnnotationListModel();
+        this.annotationList.setItemId(this.viewerModel.getDocId());
+
+        this.viewerModel.events.on('change:pageNumber', () => {
+            this.setPageNumber(this.viewerModel.getPageNumber())
+        });
     }
 
     init() {
@@ -43,7 +54,10 @@ export default class TaggingController extends Controller {
         //
 
         var panel = new PanelView({
-            el: $('#tagging')[0]
+            el: $('#tagging')[0],
+            annotationList: new AnnotationListView({
+                annotationList: this.annotationList
+            })
         }).render();
 
         var toolbar = new ToolbarView({
@@ -126,6 +140,11 @@ export default class TaggingController extends Controller {
         });
 
         return this;
+    }
+
+    setPageNumber(pageNumber) {
+        this.annotationList.setPage(pageNumber);
+        this.annotationList.load();
     }
 
     startTagging() {
