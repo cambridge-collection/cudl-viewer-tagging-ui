@@ -58,9 +58,6 @@ export function setupTaggingTab(options) {
             // start tagging
             tagging_c.startTagging();
         }
-
-        // start tagging
-        tagging_c.startTagging();
     });
 
     $('#taggingtab').on('hide.bs.tab', function(e) {
