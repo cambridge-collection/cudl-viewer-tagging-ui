@@ -41,6 +41,7 @@ export default class TaggingController extends Controller {
 
         this.annotationList = new AnnotationListModel();
         this.annotationList.setItemId(this.viewerModel.getDocId());
+        this.setPageNumber(this.viewerModel.getPageNumber());
 
         this.viewerModel.events.on('change:pageNumber', () => {
             this.setPageNumber(this.viewerModel.getPageNumber())
