@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import assign from 'lodash/assign';
+import escape from 'lodash/escape';
 import Spinner from 'spin.js';
 
 import View from './common/view';
@@ -9,7 +10,7 @@ import { NotImplementedError, RuntimeException } from '../utils/exceptions';
 
 export default class AnnotationListView extends View {
     constructor(options) {
-        super(_.assign({
+        super(assign({
             className: 'panel panel-default annotation-list'
         }, options));
 
@@ -101,7 +102,7 @@ export default class AnnotationListView extends View {
             <div class="panel-heading">
                 <h3 class="panel-title">
                     Your annotations
-                    <small>page ${_.escape(this.annotationList.getPage())}</small>
+                    <small>page ${escape(this.annotationList.getPage())}</small>
                 </h3>
             </div>
             <div class="panel-body">
@@ -212,7 +213,7 @@ export default class AnnotationListView extends View {
 
     _renderPageNumber() {
         $(this.el).find('.panel-heading h3 small')
-            .text(`page ${_.escape(this.annotationList.getPage())}`);
+            .text(`page ${escape(this.annotationList.getPage())}`);
     }
 
     _renderAnnotations() {
@@ -244,7 +245,7 @@ export default class AnnotationListView extends View {
 
 class AnnotationView extends View {
     constructor(options) {
-        super(_.assign({
+        super(assign({
             tag: 'tr'
         }, options));
 

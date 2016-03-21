@@ -1,6 +1,7 @@
 import $ from 'jquery';
-
-import _ from 'lodash';
+import includes from 'lodash/includes';
+import fromPairs from 'lodash/fromPairs';
+import isUndefined from 'lodash/isUndefined';
 
 import { ValueError } from '../utils/exceptions';
 
@@ -10,11 +11,11 @@ var path = require('path');
 export default class RestClientAgent {
 
     _notifyAnnotationChanged(op, annotation) {
-        if(!_.includes(['update', 'create', 'delete'], op)) {
+        if(!includes(['update', 'create', 'delete'], op)) {
             throw new ValueError(' Unknown op: ' + op);
         }
 
-        $(this).trigger('change:annotation', _.object([[op, annotation]]));
+        $(this).trigger('change:annotation', fromPairs([[op, annotation]]));
     }
 
     /** add or update annotation */
@@ -88,9 +89,9 @@ export default class RestClientAgent {
         console.log(opts.url);
         // console.log('payload: '+opts.data);
 
-        var method  =  opts.method || (_.isUndefined(opts.data) ? 'GET' : 'POST');
-        var payload = _.isUndefined(opts.data) ? '' : JSON.stringify(opts.data);
-        var cntType = _.isUndefined(opts.data) ? 'text/plain' : 'application/json; charset=utf-8';
+        var method  =  opts.method || (isUndefined(opts.data) ? 'GET' : 'POST');
+        var payload = isUndefined(opts.data) ? '' : JSON.stringify(opts.data);
+        var cntType = isUndefined(opts.data) ? 'text/plain' : 'application/json; charset=utf-8';
 
         $.ajax({
             url : opts.url,

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import 'jquery-ui';
-import isUndefined from 'lodash/lang/isUndefined';
+import isUndefined from 'lodash/isUndefined';
 
 /** controllers */
 import Controller from './common/controller';

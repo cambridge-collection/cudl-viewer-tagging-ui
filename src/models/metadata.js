@@ -1,6 +1,6 @@
 import util from 'util';
 
-import _ from 'lodash/lang';
+import isObject from 'lodash/isObject';
 
 import { ValueError } from '../utils/exceptions';
 
@@ -10,7 +10,7 @@ import { ValueError } from '../utils/exceptions';
  */
 export default class Metadata {
     constructor(metadata, itemId) {
-        if(!_.isObject(metadata))
+        if(!isObject(metadata))
             throw new ValueError(util.format('metadata must be an object, got: %s', metadata))
         this.metadata = metadata;
         this.itemId = itemId;

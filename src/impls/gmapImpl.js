@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import some from 'lodash/some';
+import filter from 'lodash/filter';
 import GoogleMapsLoader from 'google-maps';
 
 
@@ -95,18 +96,18 @@ export var gmapImpl = {
         }
 
         var isCountryLevel = address => {
-            return _.any(address.types, t => t === 'country');
+            return some(address.types, t => t === 'country');
         };
 
         var isCityOrTownOrCountryLevel = address => {
-            return _.any(address.types, t => t === 'country' ||
-                                             t === 'locality' ||
-                                             t === 'postal_town');
+            return some(address.types, t => t === 'country' ||
+                                            t === 'locality' ||
+                                            t === 'postal_town');
         };
 
         var predicate = zoom <= 4 ? isCountryLevel : isCityOrTownOrCountryLevel;
 
-        return _.filter(results, predicate);
+        return filter(results, predicate);
     },
 
     clearMarkers : function() {

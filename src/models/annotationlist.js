@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import StateMachine from 'javascript-state-machine';
-import _ from 'lodash';
+import isString from 'lodash/isString';
+import isNumber from 'lodash/isNumber';
+import includes from 'lodash/includes';
 
 import { ValueError, IllegalStateException, NotImplementedError } from '../utils/exceptions';
 import Annotation from './annotation';
@@ -123,7 +125,7 @@ export class AnnotationListModel {
     }
 
     setItemId(itemId) {
-        if(!_.isString(itemId) || !itemId)
+        if(!isString(itemId) || !itemId)
             throw new ValueError('itemId must be a non-empty string, got: ' +
                                  itemId);
 
@@ -133,7 +135,7 @@ export class AnnotationListModel {
     }
 
     setPage(pageNumber) {
-        if(!_.isNumber(pageNumber))
+        if(!isNumber(pageNumber))
             throw new ValueError('pageNumber must be a number, got: ' +
                                  pageNumber);
 
@@ -158,7 +160,7 @@ export class AnnotationListModel {
     }
 
     _removeAnnotationsWithIds(ids) {
-        var removed = this.annotations.filter(a => !_.includes(ids, a.getUUID()));
+        var removed = this.annotations.filter(a => !includes(ids, a.getUUID()));
 
         if(removed.length < this.annotations.length)
             this._set('annotations', removed);
