@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui';
+import 'jquery-ui/ui/dialog';
 import isUndefined from 'lodash/isUndefined';
 
 /** controllers */

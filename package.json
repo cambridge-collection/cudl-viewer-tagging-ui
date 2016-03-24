@@ -23,7 +23,7 @@
     "google-maps": "~3",
     "javascript-state-machine": "^2",
     "jquery": "^1 || ^2",
-    "jquery-ui": "^1.10",
+    "jquery-ui": "github:jquery/jquery-ui#1.11.4",
     "less": "^2",
     "less-loader": "^2",
     "lodash": "^4",
