@@ -101,8 +101,6 @@ export default class RestClientAgent {
             dataType : 'json', // response data type
             timeout : timeout, // timeout in milliseconds
         }).done(function(data, status) {
-            // do something
-        }).success(function(data, status) {
             if (data && data.redirect) {
                 // user unauthorized, redirect to login page
                 window.location.href = data.redirectURL;
