@@ -28,6 +28,7 @@
     "less-loader": "^2",
     "lodash": "^4",
     "moment": "^2",
+    "openseadragon": "^2",
     "spin.js": "^2",
     "style-loader": "^0",
     "webpack-config": "^6"

@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import OpenSeadragon from 'openseadragon';
 
 /** controllers */
 import Controller from './common/controller';
