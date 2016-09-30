@@ -51,7 +51,7 @@ export function setupTaggingTab(options) {
             e.stopPropagation();
 
             // Redirect to login page, redirecting back after login
-            window.location.href = '/auth/login?access=' +
+            window.location.href = '/auth/login?next=' +
                     encodeURIComponent(window.location.pathname + '#tagging');
 
         } else {
