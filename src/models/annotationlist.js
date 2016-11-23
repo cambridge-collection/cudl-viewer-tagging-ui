@@ -1,3 +1,5 @@
+import { resolve } from 'url';
+
 import $ from 'jquery';
 import StateMachine from 'javascript-state-machine';
 import isString from 'lodash/isString';
@@ -9,7 +11,8 @@ import Annotation from './annotation';
 
 
 export class AnnotationListModel {
-    constructor() {
+    constructor(baseUrl) {
+        this.baseUrl = baseUrl;
         this.loadingXhr = null;
         this.fsm = this.createFsm();
         this.hasItemId = false;
@@ -17,6 +20,10 @@ export class AnnotationListModel {
 
         // A function which will abort the delete request when called
         this.abortDeleteOperation = null;
+    }
+
+    _getUrl(url) {
+        return resolve(this.baseUrl, url);
     }
 
     createFsm() {
@@ -38,7 +45,7 @@ export class AnnotationListModel {
 
                 onenterloading: (event, from, to) => {
                     this.loadingXhr = $.ajax({
-                        url: `/crowdsourcing/anno/get/${encodeURIComponent(this.itemId)}/${encodeURIComponent(this.pageNumber)}`
+                        url: this._getUrl(`/crowdsourcing/anno/get/${encodeURIComponent(this.itemId)}/${encodeURIComponent(this.pageNumber)}`)
                     })
                     .fail((xhr) => this.fsm.failed(xhr.status))
                     .done((data) => {
@@ -75,7 +82,7 @@ export class AnnotationListModel {
                     var url = `/crowdsourcing/anno/remove/${encodeURIComponent(this.itemId)}`;
 
                     var jqxhr = $.ajax({
-                        url: url,
+                        url: this._getUrl(url),
                         method: 'POST',
                         data: annotationIds
                     })

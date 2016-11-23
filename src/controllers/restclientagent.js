@@ -1,4 +1,7 @@
+import { resolve } from 'url';
+
 import $ from 'jquery';
+import assert from 'assert';
 import includes from 'lodash/includes';
 import fromPairs from 'lodash/fromPairs';
 import isUndefined from 'lodash/isUndefined';
@@ -10,6 +13,18 @@ var path = require('path');
 
 export default class RestClientAgent {
 
+    constructor(baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    getApiBaseUrl() {
+        return this.baseUrl;
+    }
+
+    _getUrl(path) {
+        return resolve(this.getApiBaseUrl(), path);
+    }
+
     _notifyAnnotationChanged(op, annotation) {
         if(!includes(['update', 'create', 'delete'], op)) {
             throw new ValueError(' Unknown op: ' + op);
@@ -20,7 +35,10 @@ export default class RestClientAgent {
 
     /** add or update annotation */
     addOrUpdateAnnotation(anno, callback) {
-        var url = path.join(API_ADD_ANNO, anno.getDocumentId(), anno.getPageNum().toString());
+        var url = this._getUrl(
+            path.join(API_ADD_ANNO,
+                      anno.getDocumentId(),
+                      anno.getPageNum().toString()));
 
         this._ajax({url: url, data: anno}, resp => {
             var op = anno.getUUID() ? 'update' : 'create';
@@ -31,7 +49,7 @@ export default class RestClientAgent {
 
     /** remove tag or undo removed tag */
     addOrUpdateRemovedTag(tag, callback) {
-        var url = path.join(API_ADD_RTAG, tag.getDocumentId());
+        var url = this._getUrl(path.join(API_ADD_RTAG, tag.getDocumentId()));
 
         this._ajax({url: url, data: tag}, resp => {
             callback(tag, resp);
@@ -40,7 +58,10 @@ export default class RestClientAgent {
 
     /** remove annotation */
     removeAnnotation(anno, callback) {
-        var url = path.join(API_RMV_ANNO, anno.getDocumentId(), anno.getUUID());
+        var url = this._getUrl(path.join(
+            API_RMV_ANNO,
+            anno.getDocumentId(),
+            anno.getUUID()));
 
         this._ajax({url: url, data: anno, method: 'DELETE'}, resp => {
             this._notifyAnnotationChanged('delete', anno);
@@ -50,7 +71,7 @@ export default class RestClientAgent {
 
     /** get annotations by document id */
     getAnnotations(docId, page, callback) {
-        var url = path.join(API_GET_ANNO, docId, page.toString());
+        var url = this._getUrl(path.join(API_GET_ANNO, docId, page.toString()));
 
         this._ajax({url: url}, resp => {
             console.log('anno found: '+resp.result.annotations.length);
@@ -60,7 +81,7 @@ export default class RestClientAgent {
 
     /** get tags by document id */
     getTags(docId, callback) {
-        var url = path.join(API_GET_TAG, docId);
+        var url = this._getUrl(path.join(API_GET_TAG, docId));
 
         this._ajax({url: url}, resp => {
             console.log('tags found: '+resp.result.terms.length);
@@ -70,7 +91,7 @@ export default class RestClientAgent {
 
     /** get remove tags */
     getRemovedTags(docId, callback) {
-        var url = path.join(API_GET_RTAG, docId);
+        var url = this._getUrl(path.join(API_GET_RTAG, docId));
 
         this._ajax({url: url}, resp => {
             console.log('removed tags found: '+resp.result.tags.length);
@@ -87,7 +108,6 @@ export default class RestClientAgent {
     _ajax(opts, callback) {
 
         console.log(opts.url);
-        // console.log('payload: '+opts.data);
 
         var method  =  opts.method || (isUndefined(opts.data) ? 'GET' : 'POST');
         var payload = isUndefined(opts.data) ? '' : JSON.stringify(opts.data);

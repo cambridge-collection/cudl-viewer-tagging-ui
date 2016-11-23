@@ -39,7 +39,8 @@ export default class TaggingController extends Controller {
         this.viewer = options.viewer
         this.viewerModel = options.viewerModel;
 
-        this.annotationList = new AnnotationListModel();
+        this.annotationList = new AnnotationListModel(
+            this.ajax_c.getApiBaseUrl());
         this.annotationList.setItemId(this.viewerModel.getDocId());
         this.setPageNumber(this.viewerModel.getPageNumber());
 

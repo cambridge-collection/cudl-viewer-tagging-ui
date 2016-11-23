@@ -29,7 +29,7 @@ export function setupTaggingTab(options) {
 
     var metadata = new Metadata(viewerModel.getMetadata(), docId);
 
-    var ajax_c = new RestClientAgent();
+    var ajax_c = new RestClientAgent(context.taggingApiBaseURL || '');
 
     var tagging_c = new TaggingController({
         metadata: metadata,
@@ -64,7 +64,6 @@ export function setupTaggingTab(options) {
         // end tagging
         tagging_c.endTagging();
     });
-
 }
 
 //
