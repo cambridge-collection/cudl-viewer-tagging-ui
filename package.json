@@ -20,6 +20,7 @@
     "css-loader": "^0",
     "d3": "^3",
     "d3-cloud": "^1",
+    "es6-error": "^4",
     "google-maps": "~3",
     "javascript-state-machine": "^2",
     "jquery": "^1 || ^2 || ^3",
