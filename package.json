@@ -25,11 +25,13 @@
     "javascript-state-machine": "^2",
     "jquery": "^1 || ^2 || ^3",
     "jquery-ui": "github:jquery/jquery-ui#1.12.0",
+    "jwt-decode": "^2",
     "less": "^2",
     "less-loader": "^2",
     "lodash": "^4",
     "moment": "^2",
     "openseadragon": "^2",
+    "q": "^1",
     "spin.js": "^2",
     "style-loader": "^0",
     "webpack-config": "^6"
