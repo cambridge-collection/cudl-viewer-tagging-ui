@@ -3,13 +3,13 @@ import $ from 'jquery';
 import Q from 'q';
 import assign from 'lodash/assign';
 import jwt_decode from 'jwt-decode';
-
 import ExtendableError from 'es6-error';
+
+import { ValueError } from '../utils/exceptions';
 
 
 const TOKEN_STORAGE_KEY = 'cudl-viewer-tagging.auth-token[%s]';
 const TOKEN_REQUEST_TIMEOUT = 15 * 1000;
-
 
 export class LoginRequiredError extends ExtendableError { }
 
@@ -22,7 +22,7 @@ class AuthTokenSource {
     }
 
     getAuthToken() {
-        let token = this.cache ? this._getCachedToken() : null;
+        let token = this._cache ? this._getCachedToken() : null;
 
         return Q(token || this._obtainNewToken());
     }
@@ -68,9 +68,7 @@ class AuthTokenSource {
             throw e;
         })
         // Cache the new token
-        .tap(token => {
-            sessionStorage.setItem(this._tokenCacheKey(), token)
-        });
+        .tap(token => sessionStorage.setItem(this._tokenCacheKey(), token));
     }
 }
 
@@ -86,5 +84,20 @@ const DEFAULT_OPTIONS = {
  * until they are.
  */
 export function getAuthToken(audience, options) {
+    if(!audience)
+        throw new ValueError(`audience is required, got: ${audience}`);
+
     return new AuthTokenSource(audience, options).getAuthToken();
+}
+
+/**
+ * Set the appropreate headers in the headers object to authenticate an HTTP
+ * request with the specified token value.
+ */
+export function setAuthHeaders(token, headers) {
+    if(!token)
+        throw new ValueError(`token is required, got: ${token}`);
+
+    headers.Authorization = `Bearer ${token}`;
+    return headers;
 }

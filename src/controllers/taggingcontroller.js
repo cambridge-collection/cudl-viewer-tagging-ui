@@ -36,16 +36,15 @@ export default class TaggingController extends Controller {
         }
 
         this.ajax_c = options.ajax_c;
-        this.viewer = options.viewer
+        this.viewer = options.viewer;
         this.viewerModel = options.viewerModel;
 
-        this.annotationList = new AnnotationListModel(
-            this.ajax_c.getApiBaseUrl());
+        this.annotationList = new AnnotationListModel(this.ajax_c);
         this.annotationList.setItemId(this.viewerModel.getDocId());
         this.setPageNumber(this.viewerModel.getPageNumber());
 
         this.viewerModel.events.on('change:pageNumber', () => {
-            this.setPageNumber(this.viewerModel.getPageNumber())
+            this.setPageNumber(this.viewerModel.getPageNumber());
         });
         $(this.ajax_c).on('change:annotation', this.onAnnotationAjaxChange.bind(this));
     }

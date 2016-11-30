@@ -11,19 +11,27 @@ import Annotation from './annotation';
 
 
 export class AnnotationListModel {
-    constructor(baseUrl) {
-        this.baseUrl = baseUrl;
+    constructor(restClient) {
+        this.restClient = restClient;
         this.loadingXhr = null;
         this.fsm = this.createFsm();
         this.hasItemId = false;
         this.hasPage = false;
 
-        // A function which will abort the delete request when called
+        // A function which will abort the delete/get request when called
+        this.abortGetOperation = null;
         this.abortDeleteOperation = null;
     }
 
-    _getUrl(url) {
-        return resolve(this.baseUrl, url);
+    _addAuthentication(ajaxSettings) {
+        ajaxSettings = ajaxSettings || {};
+
+        return getAuthToken(this.getApiBaseUrl())
+            .then(function(token) {
+                ajaxSettings.headers = ajaxSettings.headers || {};
+                setAuthHeaders(token, ajaxSettings.headers);
+                return ajaxSettings;
+            });
     }
 
     createFsm() {
@@ -44,24 +52,24 @@ export class AnnotationListModel {
                 onenterstate: () => $(this).trigger('change:state'),
 
                 onenterloading: (event, from, to) => {
-                    this.loadingXhr = $.ajax({
-                        url: this._getUrl(`/crowdsourcing/anno/get/${encodeURIComponent(this.itemId)}/${encodeURIComponent(this.pageNumber)}`)
+                    let {promise, abort} = this.restClient.getAnnotations(
+                        this.itemId, this.pageNumber);
+
+                    this.abortGetOperation = abort;
+
+                    promise
+                    .then((data) => {
+                        this.fsm.loaded(data.result.annotations.map(
+                            a => new Annotation(a)));
                     })
-                    .fail((xhr) => this.fsm.failed(xhr.status))
-                    .done((data) => {
-                        this.fsm.loaded(data.result.annotations.map(a => new Annotation(a)));
-                    })
-                    .done(() => {
-                        this.xhr = null;
-                    });
+                    .catch(err => this.fsm.failed(err.status || err))
+                    .done();
                 },
                 onleaveloading: (event, from, to) => {
                     // Cancel any in-progress XHRs so we never have more than
                     // one in progress.
-                    if(this.loadingXhr.readyState !== XMLHttpRequest.DONE) {
-                        this.loadingXhr.abort();
-                    }
-                    this.loadingXhr = null;
+                    this.abortGetOperation();
+                    this.abortGetOperation = null;
                 },
                 onafterloaded: (event, from, to, annotations) => {
                     this._set('annotations', annotations);
@@ -78,18 +86,15 @@ export class AnnotationListModel {
                 },
                 onenterdeleting: (event, from, to, annotations) => {
                     var annotationIds = annotations
-                        .map(a => ({name: 'uuid', value: a.getUUID()}));
-                    var url = `/crowdsourcing/anno/remove/${encodeURIComponent(this.itemId)}`;
+                        .map(a => a.getUUID());
 
-                    var jqxhr = $.ajax({
-                        url: this._getUrl(url),
-                        method: 'POST',
-                        data: annotationIds
-                    })
-                    .fail((xhr) => this.fsm.deleteFailed(xhr.status))
-                    .done(removedIds => this.fsm.deleted(removedIds));
+                    let {promise, abort} = this.restClient.removeAnnotations(
+                        this.itemId, annotationIds);
+                    this.abortDeleteOperation = abort;
 
-                    this.abortDeleteOperation = () => jqxhr.abort();
+                    promise
+                    .then(removedIds => this.fsm.deleted(removedIds))
+                    .catch(err => this.fsm.deleteFailed(err.status || err));
                 },
                 onleavedeleting: () =>
                     this.abortDeleteOperation = null,
