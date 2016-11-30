@@ -41,5 +41,11 @@
     "webpack": "*"
   },
   "private": true,
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "jshint": "^2.9"
+  },
+  "scripts": {
+    "lint": "jshint ./src/"
+  }
 }
