@@ -174,41 +174,21 @@ export default class AnnotationListView extends View {
     }
 
     _renderDeleteError(status) {
-        if(status === 403) {
-            this._addMessage(`
-                <p class="text-danger">
-                    <strong>Unable delete annotations as you've become logged out.</strong>
-                    <a href="/auth/login">Log in</a>, then try again.
-                </p>
-            `);
-        }
-        else {
-            this._addMessage(`
-                <p class="text-danger">
-                    <strong>Unable to delete annotations.</strong>
-                    Please try again shortly.
-                </p>
-            `);
-        }
+        this._addMessage(`
+            <p class="text-danger">
+                <strong>Unable to delete annotations.</strong>
+                Please try again shortly.
+            </p>
+        `);
     }
 
     _renderError() {
-        if(this.annotationList.getErrorStatus() === 403) {
-            this._addMessage(`
-                <p class="text-danger">
-                    <strong>Unable to load annotations as you've become logged out.</strong>
-                    <a href="/auth/login">Log in</a>, then try again.
-                </p>
-            `);
-        }
-        else {
-            this._addMessage(`
-                <p class="text-danger">
-                    <strong>Unable to load annotations.</strong>
-                    Please try again shortly.
-                </p>
-            `);
-        }
+        this._addMessage(`
+            <p class="text-danger">
+                <strong>Unable to load annotations.</strong>
+                Please try again shortly.
+            </p>
+        `);
     }
 
     _renderPageNumber() {
@@ -217,14 +197,14 @@ export default class AnnotationListView extends View {
     }
 
     _renderAnnotations() {
-        this._renderPageNumber()
+        this._renderPageNumber();
 
         this.getAnnotationViews().forEach(av => av.render());
         var annotations = this.getAnnotationViews().map(av => av.el);
 
         $(this.el)
             .find('tbody')
-            .append(annotations)
+            .append(annotations);
 
         if(annotations.length === 0) {
             this._addMessage(`
@@ -250,7 +230,6 @@ class AnnotationView extends View {
         }, options));
 
         this.annotation = options.annotation;
-        this._isSelected;
     }
 
     _bindEvents() {
@@ -309,7 +288,7 @@ class AnnotationView extends View {
                         this._getFontAwesomeLogo(this.annotation.getType()))
                     .attr('alt', this.annotation.getType())
                     .attr('title', this.annotation.getType())
-            )
+            );
     }
 
     _renderValue() {
