@@ -130,7 +130,7 @@ export default class TagCloudController extends Controller {
         //
         // ajax call to remove word
         //
-        this.ajax_c.addOrUpdateRemovedTag(
+        this.ajax_c.addRemovedTag(
             new Tag({
                 docId: this.metadata.getItemId(),
                 name: $(el).text(),
@@ -145,15 +145,7 @@ export default class TagCloudController extends Controller {
         //
         // ajax call to undo removed word
         //
-        this.ajax_c.addOrUpdateRemovedTag(
-            new Tag({
-                docId: this.metadata.getItemId(),
-                name: $(el).text(),
-                raw: 1
-            }), function(resp) {
-                console.log('removed word reverted');
-            }
-        );
+        this.ajax_c.removeRemovedTag(this.metadata.getItemId(), $(el).text());
     }
 
     /**

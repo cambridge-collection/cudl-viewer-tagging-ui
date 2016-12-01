@@ -59,7 +59,7 @@ export class AnnotationListModel {
 
                     promise
                     .then((data) => {
-                        this.fsm.loaded(data.result.annotations.map(
+                        this.fsm.loaded(data.annotations.map(
                             a => new Annotation(a)));
                     })
                     .catch(err => this.fsm.failed(err.status || err))

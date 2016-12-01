@@ -23,6 +23,11 @@ export class RequestAborted extends ExtendableError { }
 
 var path = require('path');
 
+function invokeCallback(callback, ...values) {
+    if(callback)
+        callback(...values);
+}
+
 export default class RestClientAgent {
 
     constructor(baseUrl) {
@@ -75,45 +80,52 @@ export default class RestClientAgent {
     /** add or update annotation */
     addOrUpdateAnnotation(anno, callback) {
         var url = this._getUrl(
-            path.join(API_ADD_ANNO,
-                      anno.getDocumentId(),
-                      anno.getPageNum().toString()));
+            path.join(API_ANNO,
+                      anno.getDocumentId()));
 
         return this._ajax({url: url, data: anno}, resp => {
             var op = anno.getUUID() ? 'update' : 'create';
             this._notifyAnnotationChanged(op, anno);
-            callback(anno, resp);
+            invokeCallback(callback, anno, resp);
         });
     }
 
     /** remove tag or undo removed tag */
-    addOrUpdateRemovedTag(tag, callback) {
-        var url = this._getUrl(path.join(API_ADD_RTAG, tag.getDocumentId()));
+    addRemovedTag(tag, callback) {
+        var url = this._getUrl(path.join(API_RTAG, tag.getDocumentId()));
 
         return this._ajax({url: url, data: tag}, resp => {
-            callback(tag, resp);
+            invokeCallback(callback, tag, resp);
+        });
+    }
+
+    removeRemovedTag(docId, tagName, callback) {
+        var url = this._getUrl(path.join(API_RTAG, docId, tagName));
+
+        return this._ajax({url: url, method: 'DELETE'}, resp => {
+            invokeCallback(callback, tag, resp);
         });
     }
 
     /** remove annotation */
     removeAnnotation(anno, callback) {
         var url = this._getUrl(path.join(
-            API_RMV_ANNO,
+            API_ANNO,
             anno.getDocumentId(),
             anno.getUUID()));
 
         return this._ajax({url: url, data: anno, method: 'DELETE'}, resp => {
             this._notifyAnnotationChanged('delete', anno);
-            callback(anno, resp);
+            invokeCallback(callback, anno, resp);
         });
     }
 
     removeAnnotations(docId, annotationUuids, callback) {
-        let url = this._getUrl(path.join(API_RMV_ANNO, docId));
+        let url = this._getUrl(path.join(API_ANNO, docId));
 
         return this._apiRequest({
             url: url,
-            method: 'POST',
+            method: 'DELETE',
             // Send UUIDs as form data.
             data: annotationUuids.map(uuid => ({name: 'uuid', value: uuid}))
         });
@@ -121,11 +133,10 @@ export default class RestClientAgent {
 
     /** get annotations by document id */
     getAnnotations(docId, page, callback) {
-        var url = this._getUrl(path.join(API_GET_ANNO, docId, page.toString()));
+        var url = this._getUrl(path.join(API_ANNO, docId, page.toString()));
 
         return this._ajax({url: url}, resp => {
-            if(callback)
-                callback(resp.result.annotations);
+            invokeCallback(callback, resp.annotations);
         });
     }
 
@@ -134,18 +145,16 @@ export default class RestClientAgent {
         var url = this._getUrl(path.join(API_GET_TAG, docId));
 
         return this._ajax({url: url}, resp => {
-            console.log('tags found: '+resp.result.terms.length);
-            callback(resp.result.terms);
+            invokeCallback(callback, resp.terms);
         });
     }
 
     /** get remove tags */
     getRemovedTags(docId, callback) {
-        var url = this._getUrl(path.join(API_GET_RTAG, docId));
+        var url = this._getUrl(path.join(API_RTAG, docId));
 
         return this._ajax({url: url}, resp => {
-            console.log('removed tags found: ' + resp.result.tags.length);
-            callback(resp.result.tags);
+            invokeCallback(callback, resp.tags);
         });
     }
 
@@ -227,16 +236,7 @@ export default class RestClientAgent {
 
         let {promise, abort} = this._apiRequest(settings);
 
-        promise = promise.tap(function(data) {
-            if (data && data.redirect) {
-                // user unauthorized, redirect to login page
-                window.location.href = data.redirectURL;
-            } else {
-                callback(data);
-            }
-        }, function(error) {
-            console.error('ajax request failed:', error);
-        });
+        promise = promise.tap(callback);
 
         return {promise: promise, abort: abort};
     }
@@ -248,12 +248,8 @@ export default class RestClientAgent {
  */
 
 const BASE = '/crowdsourcing';
-const API_ADD_ANNO = BASE + '/anno/update';
-const API_GET_ANNO = BASE + '/anno/get';
-const API_RMV_ANNO = BASE + '/anno/remove';
-const API_ADD_RTAG = BASE + '/rmvtag/update';
-const API_GET_RTAG = BASE + '/rmvtag/get';
-const API_GET_TAG  = BASE + '/tag/get';
-const API_AUTH     = BASE + '/auth';
+const API_ANNO = BASE + '/anno';
+const API_RTAG = BASE + '/rmvtag';
+const API_GET_TAG = BASE + '/tag';
 
 const timeout      = 10000; // milliseconds
