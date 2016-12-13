@@ -10,21 +10,29 @@ import { ValueError } from '../utils/exceptions';
 
 const TOKEN_STORAGE_KEY = 'cudl-viewer-tagging.auth-token[%s]';
 const TOKEN_REQUEST_TIMEOUT = 15 * 1000;
+const TOKEN_MIN_LIFETIME = 5 * 1000;
 
 export class LoginRequiredError extends ExtendableError { }
 
 const DEFAULT_ACTIVE_REQUESTS = {};
 const DEFAULT_OPTIONS = {
     cache: true,
-    activeRequests: DEFAULT_ACTIVE_REQUESTS
+    activeRequests: DEFAULT_ACTIVE_REQUESTS,
+    minCachedTokenLifetime: TOKEN_MIN_LIFETIME
 };
 
 class AuthTokenSource {
     constructor(audienceUrl, options) {
         options = assign({}, DEFAULT_OPTIONS, options);
 
+        if(options.minCachedTokenLifetime < 0) {
+            throw new ValueError('minCachedTokenLifetime was negative: ' +
+                options.minCachedTokenLifetime);
+        }
+
         this._audienceUrl = audienceUrl;
         this._cache = !!options.cache;
+        this._minCachedTokenLifetime = options.minCachedTokenLifetime;
         this._activeRequests = options.activeRequests;
     }
 
@@ -60,7 +68,8 @@ class AuthTokenSource {
 
         let now = Math.floor(Date.now() / 1000);
 
-        return jwt.nbf && jwt.nbf <= now && jwt.exp && jwt.exp > now;
+        return jwt.nbf && jwt.nbf <= now && jwt.exp &&
+            (jwt.exp - now) > this._minCachedTokenLifetime;
     }
 
     _tokenCacheKey() {
