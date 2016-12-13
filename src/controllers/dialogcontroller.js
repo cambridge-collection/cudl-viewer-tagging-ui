@@ -411,7 +411,7 @@ export default class DialogController extends Controller {
         }
 
         // get position
-        var position = {};
+        var position;
         switch (idx[0]) {
             case this.TOOLBAR.PRIMARY.POINT:
                 var el = this.osd_c.guideicon, p = $(el).position(), ow = $(el).outerWidth(), oh = $(el).outerHeight();
