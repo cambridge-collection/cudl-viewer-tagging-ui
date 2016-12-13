@@ -63,7 +63,9 @@ export default class TaggingController extends Controller {
             el: $('#tagging')[0],
             annotationList: new AnnotationListView({
                 annotationList: this.annotationList
-            })
+            }),
+            restClient: this.ajax_c,
+            metadata: this.metadata
         }).render();
 
         var toolbar = new ToolbarView({

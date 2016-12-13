@@ -15,6 +15,8 @@ import { LoginRequiredError } from '../utils/httpapi';
 import { getAuthToken, setAuthHeaders } from '../utils/httpapi';
 
 
+const DOWNLOAD_AUTHENTICATION_QUERYPARAM = '__token__';
+
 /**
  * Used to reject a promise when the request backing the promise is canceled.
  */
@@ -75,6 +77,32 @@ export default class RestClientAgent {
 
                 return assign({}, ajaxSettings, {headers: headers});
             });
+    }
+
+    _getDownloadUrl(path) {
+        return Q(this._getUrl(path))
+        .then(this._addDownloadAuthentication.bind(this));
+    }
+
+    _addDownloadAuthentication(path) {
+        return getAuthToken(this.getApiBaseUrl(), {
+            cache: true,
+            // Ensure tokens are valid for at least 15 seconds to minimise the
+            // risk of browsing to a page with an invalid token.
+            minCachedTokenLifetime: 15 * 1000
+        })
+        .then(token => `${path}?` +
+            encodeURIComponent(DOWNLOAD_AUTHENTICATION_QUERYPARAM) + '=' +
+            encodeURIComponent(token));
+    }
+
+    getExportAllContributionsUrl() {
+        return this._getDownloadUrl(API_EXPORT);
+    }
+
+    getExportItemContributionsUrl(docId) {
+        return this._getDownloadUrl(
+            path.join(API_EXPORT, encodeURIComponent(docId)));
     }
 
     /** add or update annotation */
@@ -251,5 +279,6 @@ const BASE = '/crowdsourcing';
 const API_ANNO = BASE + '/anno';
 const API_RTAG = BASE + '/rmvtag';
 const API_GET_TAG = BASE + '/tag';
+const API_EXPORT = BASE + '/export';
 
 const timeout      = 10000; // milliseconds

@@ -14,7 +14,10 @@ export default class Panel extends View {
             throw new ValueError(`options.annotationList is not a View ` +
                                  `instance: ${options.annotationList}`);
 
-        this.tagexport = new TagExportView();
+        this.tagexport = new TagExportView({
+            restClient: options.restClient,
+            metadata: options.metadata
+        });
         this.annotationList = options.annotationList;
     }
 

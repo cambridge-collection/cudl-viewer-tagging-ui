@@ -66,10 +66,11 @@ class AuthTokenSource {
             return false;
         }
 
-        let now = Math.floor(Date.now() / 1000);
+        let nowMillis = Date.now();
+        let nowSeconds = Math.floor(nowMillis / 1000);
 
-        return jwt.nbf && jwt.nbf <= now && jwt.exp &&
-            (jwt.exp - now) > this._minCachedTokenLifetime;
+        return jwt.nbf && jwt.nbf <= nowSeconds && jwt.exp &&
+            (jwt.exp * 1000 - nowMillis) > this._minCachedTokenLifetime;
     }
 
     _tokenCacheKey() {
