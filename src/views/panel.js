@@ -10,7 +10,7 @@ export default class Panel extends View {
     constructor(options) {
         super(options);
 
-        if(!options.annotationList instanceof View)
+        if(!(options.annotationList instanceof View))
             throw new ValueError(`options.annotationList is not a View ` +
                                  `instance: ${options.annotationList}`);
 
