@@ -13,14 +13,13 @@
     "Hal Blackburn <hwtb2@cam.ac.uk>"
   ],
   "dependencies": {
+    "css-loader": "2.1.0",
+    "babel-loader": "8.0.5",
     "@babel/cli": "7.2.3",
     "@babel/core": "7.3.4",
     "@babel/preset-env": "7.3.4",
     "@babel/register": "7.0.0",
     "@babel/polyfill": "7.2.5",
-    "babel-loader": "8.0.5",
-    "webpack": "4.29.5",
-    "css-loader": "2.1.0",
     "d3": "5.9.1",
     "d3-cloud": "1.2.5",
     "es6-error": "4.1.1",
@@ -42,7 +41,8 @@
   "private": true,
   "license": "UNLICENSED",
   "devDependencies": {
-    "jshint": "2.10.1"
+    "jshint": "2.10.1",
+    "webpack": "4.29.5"
   },
   "scripts": {
     "lint": "jshint ./src/"
