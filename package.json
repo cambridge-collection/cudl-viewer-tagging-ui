@@ -13,37 +13,36 @@
     "Hal Blackburn <hwtb2@cam.ac.uk>"
   ],
   "dependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/register": "^7.0.0",
-    "css-loader": "^1.0.1",
-    "d3": "^3",
-    "d3-cloud": "^1",
-    "es6-error": "^4",
-    "google-maps": "~3",
-    "javascript-state-machine": "^2",
-    "jquery": "^1 || ^2 || ^3",
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.3.4",
+    "@babel/preset-env": "7.3.4",
+    "@babel/register": "7.0.0",
+    "@babel/polyfill": "7.2.5",
+    "babel-loader": "8.0.5",
+    "webpack": "4.29.5",
+    "css-loader": "2.1.0",
+    "d3": "5.9.1",
+    "d3-cloud": "1.2.5",
+    "es6-error": "4.1.1",
+    "google-maps": "3.3.0",
+    "javascript-state-machine": "3.1.0",
+    "jquery": "3.3.1",
     "jquery-ui": "github:jquery/jquery-ui#1.12.0",
-    "jwt-decode": "^2",
-    "less": "^3.8.1",
-    "less-loader": "^4.1.0",
-    "lodash": "^4",
-    "moment": "^2",
-    "openseadragon": "^2",
-    "q": "^1",
-    "spin.js": "^2",
-    "style-loader": "^0.23.1",
-    "webpack-config": "^7.5.0"
-  },
-  "peerDependencies": {
-    "@babel/core": "^7",
-    "webpack": "^2 || ^3 || ^4"
+    "jwt-decode": "2.2.0",
+    "less": "3.9.0",
+    "less-loader": "4.1.0",
+    "lodash": "4.17.11",
+    "moment": "2.24.0",
+    "openseadragon": "2.4.0",
+    "q": "1.5.1",
+    "spin.js": "4.0.0",
+    "style-loader": "0.23.1",
+    "webpack-config": "7.5.0"
   },
   "private": true,
   "license": "UNLICENSED",
   "devDependencies": {
-    "jshint": "^2.9"
+    "jshint": "2.10.1"
   },
   "scripts": {
     "lint": "jshint ./src/"

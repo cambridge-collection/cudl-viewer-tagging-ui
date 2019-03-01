@@ -1,6 +1,7 @@
 // Imported for side-effects:
 import '../styles/tagging.less';
-import 'babel-polyfill';
+import '@babel/polyfill';
+import url from 'url';
 
 import $ from 'jquery';
 
@@ -14,7 +15,28 @@ import TaggingController from './controllers/taggingcontroller';
 import Metadata from './models/metadata';
 
 
+function getLoginUrl() {
+    let u = url.parse(window.location.toString());
+    // Return to tagging section after login
+    u.hash = '#tagging';
+
+    // Create a relative URL with the path, query and fragment
+    u.protocol = u.host = u.auth = u.port = u.hostname = null;
+    u.slashes = false;
+
+    // Encode url for a query param. But unescape slashes, as they don't need
+    // to be escaped and escaping them makes the URL look ugly.
+    let next = encodeURIComponent(url.format(u)).replace(/%2f/ig, '/');
+
+    return '/auth/login?next=' + next;
+}
+
 export function setupTaggingTab(options) {
+
+    $('#taggingtab').on('login-required', function(e) {
+        window.location = getLoginUrl();
+    });
+
     let {docId, viewer, viewerModel} = options;
 
     let context = getPageContext();
@@ -29,7 +51,7 @@ export function setupTaggingTab(options) {
 
     var metadata = new Metadata(viewerModel.getMetadata(), docId);
 
-    var ajax_c = new RestClientAgent();
+    var ajax_c = new RestClientAgent(context.taggingApiBaseURL || '');
 
     var tagging_c = new TaggingController({
         metadata: metadata,
@@ -64,7 +86,6 @@ export function setupTaggingTab(options) {
         // end tagging
         tagging_c.endTagging();
     });
-
 }
 
 //
