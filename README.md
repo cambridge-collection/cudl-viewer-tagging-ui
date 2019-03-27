@@ -8,3 +8,5 @@ It gets integrated into the CUDL UI via the main UI build,
 
 The Genizah Tagging platform is 
 [explained on the CUDL wiki](https://wiki.cam.ac.uk/cudl-docs/Genizah_Annotation).
+
+The current live version is the latest tag from the 1.x branch. 
