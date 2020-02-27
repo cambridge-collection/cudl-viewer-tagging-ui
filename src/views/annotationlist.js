@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import assign from 'lodash/assign';
 import escape from 'lodash/escape';
-import Spinner from 'spin.js';
+import {Spinner} from 'spin.js';
 
 import View from './common/view';
 import { ICONS } from '../utils/base64icons';
